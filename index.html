@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paleta de Cores com Expansão</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 2px;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .color-box {
+            width: 100%;
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+
+        /* Estilos do modal */
+        .modal {
+            display: none; /* Oculto por padrão */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8); /* Fundo semi-transparente */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Função para gerar cores aleatórias
+        function gerarCores(qtd) {
+            const cores = [];
+            for (let i = 0; i < qtd; i++) {
+                const cor = `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`;
+                cores.push(cor);
+            }
+            return cores;
+        }
+
+        const maxCores = 500; // Quantidade máxima de cores
+        const cores = gerarCores(maxCores);
+
+        const body = document.body;
+
+        // Criar e adicionar quadrados de cores
+        cores.forEach(cor => {
+            const colorBox = document.createElement('div');
+            colorBox.classList.add('color-box');
+            colorBox.style.backgroundColor = cor;
+            colorBox.textContent = cor;
+
+            // Evento de clique para abrir o modal
+            colorBox.addEventListener('click', () => abrirModal(cor));
+
+            body.appendChild(colorBox);
+        });
+
+        // Criar modal dinamicamente
+        const modal = document.createElement('div');
+        modal.classList.add('modal');
+        modal.innerHTML = `
+            <div class="modal-close" onclick="fecharModal()">×</div>
+            <div class="modal-content"></div>
+        `;
+        modal.addEventListener('click', fecharModal); // Fecha o modal ao clicar fora do conteúdo
+        document.body.appendChild(modal);
+
+        // Função para abrir o modal
+        function abrirModal(cor) {
+            const modalContent = modal.querySelector('.modal-content');
+            modalContent.style.backgroundColor = cor;
+            modalContent.textContent = cor;
+            modal.style.display = 'flex'; // Exibir o modal
+        }
+
+        // Função para fechar o modal
+        function fecharModal(event) {
+            // Garantir que somente o clique no fundo do modal feche
+            if (event.target === modal) {
+                modal.style.display = 'none'; // Ocultar o modal
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
